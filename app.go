@@ -10,8 +10,10 @@ import (
 
 
 const (
-	URL     = "https://slack.com/api/chat.postMessage"
-	scope   = "chat:write:user"
+	URLpost   = "https://slack.com/api/chat.postMessage"
+	URLjoin   = "https://slack.com/api/channels.join"
+	joinScope = "channels:write"
+	postScope = "chat:write:user"
 )
 
 var (
@@ -20,24 +22,43 @@ var (
 )
 
 func main() {
-	query := url.Values{}
-	query.Add("token", token)
-	query.Add("channel", channel)
-	query.Add("scope", scope)
-	query.Add("as_user", "true")
-	query.Add("text", "13:37")
+	joinQuery := url.Values{}
+	joinQuery.Add("token", token)
+	joinQuery.Add("name", channel)
+	joinQuery.Add("scope", joinScope)
 
-	resp, err := http.PostForm(URL, query)
+	join, err := http.PostForm(URLjoin, joinQuery)
 	if err != nil {
 		log.Printf("Error: %s\n", err.Error())
 		return
 	}
-	defer resp.Body.Close()
+	defer join.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(join.Body)
 	if err != nil {
 		log.Printf("Error: %s\n", err.Error())
 		return
 	}
-	log.Printf("Code: %d, Response: %s\n", resp.StatusCode, string(body))
+	log.Printf("Join: Code: %d, Response: %s\n", join.StatusCode, string(body))
+
+	postQuery := url.Values{}
+	postQuery.Add("token", token)
+	postQuery.Add("channel", channel)
+	postQuery.Add("postScope", postScope)
+	postQuery.Add("as_user", "true")
+	postQuery.Add("text", "13:37")
+
+	post, err := http.PostForm(URLpost, postQuery)
+	if err != nil {
+		log.Printf("Error: %s\n", err.Error())
+		return
+	}
+	defer post.Body.Close()
+
+	body, err = ioutil.ReadAll(post.Body)
+	if err != nil {
+		log.Printf("Error: %s\n", err.Error())
+		return
+	}
+	log.Printf("Post: Code: %d, Response: %s\n", post.StatusCode, string(body))
 }
