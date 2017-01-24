@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -33,8 +34,7 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	var body []byte
-	_, err = resp.Body.Read(body)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Printf("Error: %s\n", err.Error())
 		return
