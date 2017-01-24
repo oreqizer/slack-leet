@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"sync"
 )
 
 
@@ -20,7 +21,13 @@ var (
 )
 
 
-func leet() {
+type Leet struct {
+	wg *sync.WaitGroup
+}
+
+func (l *Leet) Run() {
+	defer l.wg.Done()
+
 	var query url.Values
 	query.Add("token", token)
 	query.Add("channel", channel)
@@ -43,7 +50,13 @@ func leet() {
 }
 
 func main() {
+	wg := &sync.WaitGroup{}
+	wg.Add(365)  // do it for a year
+
+	leet := &Leet{wg}
 	c := cron.New()
-	c.AddFunc("0 37 13 * * *", leet)
+	c.AddJob("0 37 13 * * *", leet)
 	c.Start()
+
+	wg.Wait()
 }
