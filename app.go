@@ -8,8 +8,8 @@ import (
 
 const (
 	URL     = "https://slack.com/api/chat.postMessage"
-	token   = os.Getenv("TOKEN")
-	channel = os.Getenv("CHANNEL")
+	token   = os.Getenv("SLACK_TOKEN")
+	channel = os.Getenv("SLACK_CHANNEL")
 	scope   = "chat:write:user"
 )
 
