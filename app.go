@@ -30,8 +30,16 @@ func leet() {
 
 	resp, err := http.NewRequest(http.MethodPost, URL+query.Encode(), nil)
 	if err != nil {
-		log.Print("Error: " + err.Error())
+		log.Println("Error: " + err.Error())
 	}
+	defer resp.Body.Close()
+
+	var body []byte
+	_, err = resp.Body.Read(body)
+	if err != nil {
+		log.Println("Error: " + err.Error())
+	}
+	log.Println("Response: " + string(body))
 }
 
 func main() {
