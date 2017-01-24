@@ -1,9 +1,10 @@
 package main
 
 import (
-	"os"
-	"net/url"
+	"log"
 	"net/http"
+	"net/url"
+	"os"
 )
 
 const (
@@ -13,7 +14,6 @@ const (
 	scope   = "chat:write:user"
 )
 
-
 func leet() {
 	var query url.Values
 	query.Add("token", token)
@@ -22,7 +22,7 @@ func leet() {
 	query.Add("as_user", true)
 	query.Add("text", "13:37")
 
-	resp, err := http.NewRequest(http.MethodPost, URL + query.Encode(), nil)
+	resp, err := http.NewRequest(http.MethodPost, URL+query.Encode(), nil)
 	if err != nil {
 		log.Print("Error: " + err.Error())
 	}
