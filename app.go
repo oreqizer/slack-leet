@@ -28,25 +28,27 @@ type Leet struct {
 func (l *Leet) Run() {
 	defer l.wg.Done()
 
-	var query url.Values
+	query := url.Values{}
 	query.Add("token", token)
 	query.Add("channel", channel)
 	query.Add("scope", scope)
 	query.Add("as_user", "true")
 	query.Add("text", "13:37")
 
-	resp, err := http.NewRequest(http.MethodPost, URL+query.Encode(), nil)
+	resp, err := http.PostForm(URL, query)
 	if err != nil {
-		log.Println("Error: " + err.Error())
+		log.Printf("Error: %s\n", err.Error())
+		return
 	}
 	defer resp.Body.Close()
 
 	var body []byte
 	_, err = resp.Body.Read(body)
 	if err != nil {
-		log.Println("Error: " + err.Error())
+		log.Printf("Error: %s\n", err.Error())
+		return
 	}
-	log.Println("Response: " + string(body))
+	log.Printf("Code: %d, Response: %s\n", resp.StatusCode, string(body))
 }
 
 func main() {
@@ -55,7 +57,7 @@ func main() {
 
 	leet := &Leet{wg}
 	c := cron.New()
-	c.AddJob("0 37 13 * * *", leet)
+	c.AddJob("0 41 17 * * *", leet)
 	c.Start()
 
 	wg.Wait()
