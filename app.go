@@ -1,12 +1,10 @@
 package main
 
 import (
-	"github.com/robfig/cron"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
-	"sync"
 )
 
 
@@ -20,14 +18,7 @@ var (
 	channel = os.Getenv("SLACK_CHANNEL")
 )
 
-
-type Leet struct {
-	wg *sync.WaitGroup
-}
-
-func (l *Leet) Run() {
-	defer l.wg.Done()
-
+func main() {
 	query := url.Values{}
 	query.Add("token", token)
 	query.Add("channel", channel)
@@ -49,16 +40,4 @@ func (l *Leet) Run() {
 		return
 	}
 	log.Printf("Code: %d, Response: %s\n", resp.StatusCode, string(body))
-}
-
-func main() {
-	wg := &sync.WaitGroup{}
-	wg.Add(365)  // do it for a year
-
-	leet := &Leet{wg}
-	c := cron.New()
-	c.AddJob("0 41 17 * * *", leet)
-	c.Start()
-
-	wg.Wait()
 }
