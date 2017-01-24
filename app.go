@@ -8,7 +8,6 @@ import (
 	"os"
 )
 
-
 const (
 	URLpost   = "https://slack.com/api/chat.postMessage"
 	URLjoin   = "https://slack.com/api/channels.join"
