@@ -38,7 +38,7 @@ func post() {
 	query := url.Values{}
 	query.Add("token", token)
 	query.Add("channel", channel)
-	query.Add("postScope", "chat:write:user")
+	query.Add("scope", "chat:write:user")
 	query.Add("as_user", "true")
 	query.Add("text", "13:37")
 
